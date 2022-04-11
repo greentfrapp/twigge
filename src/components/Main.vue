@@ -6,7 +6,7 @@
           {{ tweet }}
         </div>
         <div class="font-serif text-2xl text-gray-700">
-          {{ author }}, {{ date + 1 }}
+          {{ author }}, {{ date + 1 }}, {{board ? board.clientWidth : 0}}, {{ propX.toFixed(2) }}
         </div>
       </div>
       <div class="tweet bg-white sm:shadow-around sm:rounded-xl flex flex-col justify-center min-w-screen px-6 sm:px-10 py-4 sm:py-10 gap-6 text-center z-10">
@@ -14,7 +14,7 @@
           {{ tweet }}
         </div>
         <div class="font-serif text-2xl text-gray-700">
-          {{ author }}, {{ date }}
+          {{ author }}, {{ date }}, {{board ? board.clientWidth : 0}}, {{ propX.toFixed(2) }}
         </div>
       </div>
       <CheckCircleIcon class="absolute text-gray-500 h-36 pointer-events-none z-20" :style="{ opacity: yesOpacity }" />
@@ -59,6 +59,7 @@ export default defineComponent({
       startPosY: 0,
       yesOpacity: 0,
       noOpacity: 0,
+      propX: 0,
     }
   },
   methods: {
@@ -90,6 +91,7 @@ export default defineComponent({
       
       // get ratio between swiped pixels and the axes
       let propX = e.deltaX / this.board.clientWidth
+      this.propX = propX
       
       // get swipe direction, left (-1) or right (1)
       let dirX = e.deltaX < 0 ? -1 : 1
@@ -118,7 +120,7 @@ export default defineComponent({
         this.topCard.style.transition = 'all 200ms ease-out'
         
         // check threshold
-        if (propX > 0.5 && e.direction === Hammer.DIRECTION_RIGHT) {
+        if (propX > 0.25 && e.direction === Hammer.DIRECTION_RIGHT) {
           // get right border position
           posX = this.board.clientWidth
           // throw card towards the right border
@@ -128,7 +130,7 @@ export default defineComponent({
 
           this.date += 1
           
-        } else if (propX < -0.5 && e.direction === Hammer.DIRECTION_LEFT) {
+        } else if (propX < -0.25 && e.direction === Hammer.DIRECTION_LEFT) {
           // get left border position
           posX = - this.board.clientWidth
           // throw card towards the left border
