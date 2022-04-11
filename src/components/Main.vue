@@ -6,7 +6,7 @@
           {{ tweet }}
         </div>
         <div class="font-serif text-2xl text-gray-700">
-          {{ author }}, {{ date + 1 }}, {{board ? board.clientWidth : 0}}, {{ propX.toFixed(2) }}
+          {{ author }}, {{ date + 1 }}, {{ deltaX }}, {{ propX.toFixed(2) }}
         </div>
       </div>
       <div class="tweet bg-white sm:shadow-around sm:rounded-xl flex flex-col justify-center min-w-screen px-6 sm:px-10 py-4 sm:py-10 gap-6 text-center z-10">
@@ -14,7 +14,7 @@
           {{ tweet }}
         </div>
         <div class="font-serif text-2xl text-gray-700">
-          {{ author }}, {{ date }}, {{board ? board.clientWidth : 0}}, {{ propX.toFixed(2) }}
+          {{ author }}, {{ date }}, {{ deltaX }}, {{ propX.toFixed(2) }}
         </div>
       </div>
       <CheckCircleIcon class="absolute text-gray-500 h-36 pointer-events-none z-20" :style="{ opacity: yesOpacity }" />
@@ -59,6 +59,7 @@ export default defineComponent({
       startPosY: 0,
       yesOpacity: 0,
       noOpacity: 0,
+      deltaX: 0,
       propX: 0,
     }
   },
@@ -91,6 +92,7 @@ export default defineComponent({
       
       // get ratio between swiped pixels and the axes
       let propX = e.deltaX / this.board.clientWidth
+      this.deltaX = e.deltaX
       this.propX = propX
       
       // get swipe direction, left (-1) or right (1)
