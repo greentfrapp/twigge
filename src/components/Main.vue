@@ -2,7 +2,7 @@
   <div class="flex justify-center items-center min-h-screen w-screen overflow-x-hidden">
     <div class="board relative w-max max-w-lg flex flex-col items-center justify-center gap-2">
       <div class="absolute top-0 h-screen sm:h-[32rem] sm:rounded-xl sm:border flex items-center bg-white">
-        <div class="bg-white flex flex-col justify-center min-w-screen px-6 sm:px-10 py-4 sm:py-10 gap-6 text-center">
+        <div class="bg-white w-screen flex flex-col justify-center px-6 sm:px-10 py-4 sm:py-10 gap-6 text-center">
           <div class="text-prose font-serif text-2xl sm:text-3xl max-w-prose whitespace-pre-wrap text-gray-800">
             {{ tweets[1].text }}
           </div>
@@ -12,7 +12,7 @@
         </div>
       </div>
       <div class="tweet h-screen sm:h-[32rem] overflow-auto z-10 shadow-around sm:rounded-xl cursor-pointer flex items-center bg-white">
-        <div class="bg-white flex flex-col justify-center min-w-screen px-6 sm:px-10 py-4 sm:py-10 gap-6 text-center z-10">
+        <div class="bg-white w-screen flex flex-col justify-center px-6 sm:px-10 py-4 sm:py-10 gap-6 text-center z-10">
           <div class="font-serif text-2xl sm:text-3xl max-w-prose whitespace-pre-wrap text-gray-800">
             {{ tweets[0].text }}
           </div>
@@ -45,6 +45,7 @@ import Hammer from 'hammerjs'
 
 export default defineComponent({
   mounted () {
+    this.searchTweets()
     this.board = document.querySelector('.board')
     const tweet = document.querySelector('.tweet') as HTMLElement
     this.topCard = tweet
@@ -60,7 +61,8 @@ export default defineComponent({
   data () {
     return {
       board: null as any,
-      tweets: [{
+      tweets: [
+        {
           text: 'The evolution of API for running cutting edge AI:\n- run it on your own machine \n- run it in the cloud\n- apply pay for and query an api endpoint\n- pretty please ask one of the authors to run it for you on Twitter \n🥲',
           author: 'Andrej Karpathy',
           date: 'Apr 8',
@@ -69,13 +71,15 @@ export default defineComponent({
           author: 'Benedict Evans',
           date: 'Apr 11',
         },
-      ],
+      ] as any[],
       topCard: null as any,
       isPanning: false,
       startPosX: 0,
       yesOpacity: 0,
       noOpacity: 0,
       hintTransition: 'none',
+      lambdaUrl: 'https://y6c1a626wf.execute-api.us-east-1.amazonaws.com/default/twigge-dev',
+      nextToken: null as any,
     }
   },
   methods: {
@@ -85,9 +89,32 @@ export default defineComponent({
       this.topCard.style.opacity = 1
     },
     async updateTweet () {
-      const tweet = this.tweets[0]
-      this.tweets[0] = this.tweets[1]
-      setTimeout(() => this.tweets[1] = tweet, 200)
+      // const tweet = this.tweets[0]
+      // this.tweets[0] = this.tweets[1]
+      // setTimeout(() => this.tweets[1] = tweet, 200)
+      setTimeout(() => {
+        this.tweets.shift()
+        if (this.tweets.length < 4) {
+          console.log('refreshing')
+          this.searchTweets()
+        }
+      }, 200)
+    },
+    async searchTweets () {
+      fetch(this.lambdaUrl, {
+        method: 'POST',
+        body: JSON.stringify({
+          query: "context:66.848921413196984320 -is:retweet -has:links -has:hashtags -has:mentions -has:media lang:en -dm -is:reply -👇 -🧵 -🧵⬇",
+          next_token: this.nextToken,
+        })
+      }).then(async response => {
+        const data = await response.json()
+        console.log(data)
+        this.nextToken = data.next_token
+        data.tweets.forEach((tweet:any) => {
+          this.tweets.push(tweet)
+        })
+      })
     },
     panHandler (e:any) {
       if (e.additionalEvent === 'panup') console.log('bad')
