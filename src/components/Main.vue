@@ -27,6 +27,12 @@
   </div>
 </template>
 
+<style scoped>
+.tweet * {
+  touch-action: none;
+}
+</style>
+
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { HeartIcon, RefreshIcon } from '@heroicons/vue/outline'
