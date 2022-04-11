@@ -1,8 +1,8 @@
 <template>
   <div class="flex justify-center items-center min-h-screen w-screen overflow-x-hidden">
-    <div class="board relative w-max max-w-lg flex flex-col items-center justify-center gap-2">
+    <div class="board relative w-max max-w-lg flex flex-col items-center justify-center gap-2 pb-16">
       <div class="absolute top-0 bg-white sm:rounded-xl flex flex-col justify-center min-w-screen px-6 sm:px-10 py-4 sm:py-10 gap-6 text-center">
-        <div class="text-prose font-serif text-3xl max-w-prose whitespace-pre-wrap text-gray-800">
+        <div class="text-prose font-serif text-2xl sm:text-3xl max-w-prose whitespace-pre-wrap text-gray-800">
           {{ tweet }}
         </div>
         <div class="font-serif text-2xl text-gray-700">
@@ -10,7 +10,7 @@
         </div>
       </div>
       <div class="tweet bg-white sm:shadow-around sm:rounded-xl flex flex-col justify-center min-w-screen px-6 sm:px-10 py-4 sm:py-10 gap-6 text-center z-10">
-        <div class="text-prose font-serif text-3xl max-w-prose whitespace-pre-wrap text-gray-800">
+        <div class="text-prose font-serif text-2xl sm:text-3xl max-w-prose whitespace-pre-wrap text-gray-800">
           {{ tweet }}
         </div>
         <div class="font-serif text-2xl text-gray-700">
@@ -19,7 +19,7 @@
       </div>
       <CheckCircleIcon class="absolute text-gray-500 h-36 pointer-events-none z-20" :style="{ opacity: yesOpacity }" />
       <XCircleIcon class="absolute text-gray-500 h-36 pointer-events-none z-20" :style="{ opacity: noOpacity }" />
-      <div class="fixed bottom-0 sm:static flex justify-evenly py-4 w-full shadow-around sm:rounded-xl">
+      <div class="fixed bottom-0 sm:static bg-white flex justify-evenly py-4 w-full shadow-around sm:rounded-xl z-20 sm:z-0">
         <HeartIcon class="text-gray-500 h-6 w-6 cursor-pointer" />
         <RefreshIcon class="text-gray-500 h-6 w-6 cursor-pointer" />
       </div>
