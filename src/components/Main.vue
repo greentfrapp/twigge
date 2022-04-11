@@ -68,6 +68,8 @@ export default defineComponent({
       this.topCard.style.opacity = 1
     },
     panHandler (e:any) {
+      if (e.additionalEvent === 'panup') console.log('bad')
+      if (e.additionalEvent === 'pandown') console.log('bad')
       if (!this.isPanning) {
     
         this.isPanning = true
