@@ -109,13 +109,14 @@ export default defineComponent({
       }).then(async response => {
         const data = await response.json()
         this.nextToken = data.next_token
-        data.tweets.forEach((tweet:any) => {
-          this.tweets.push({
-            text: tweet.text.replace('&gt;', '>').replace('&amp;', '&').replace('&lt;', '<'),
-            author: tweet.author,
-            date: tweet.date,
+        data.tweets.filter((tweet:any) => tweet.text.split(/\r\n|\r|\n/).length <= 5)
+          .forEach((tweet:any) => {
+            this.tweets.push({
+              text: tweet.text.replace('&gt;', '>').replace('&amp;', '&').replace('&lt;', '<'),
+              author: tweet.author,
+              date: tweet.date,
+            })
           })
-        })
       })
     },
     panHandler (e:any) {
