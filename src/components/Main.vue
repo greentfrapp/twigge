@@ -95,7 +95,6 @@ export default defineComponent({
       setTimeout(() => {
         this.tweets.shift()
         if (this.tweets.length < 4) {
-          console.log('refreshing')
           this.searchTweets()
         }
       }, 200)
@@ -109,10 +108,13 @@ export default defineComponent({
         })
       }).then(async response => {
         const data = await response.json()
-        console.log(data)
         this.nextToken = data.next_token
         data.tweets.forEach((tweet:any) => {
-          this.tweets.push(tweet)
+          this.tweets.push({
+            text: tweet.text.replace('&gt;', '>').replace('&amp;', '&').replace('&lt;', '<'),
+            author: tweet.author,
+            date: tweet.date,
+          })
         })
       })
     },
