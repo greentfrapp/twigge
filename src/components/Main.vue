@@ -6,7 +6,7 @@
           {{ tweet }}
         </div>
         <div class="font-serif text-2xl text-gray-700">
-          {{ author }}, {{ date }}
+          {{ author }}, {{ date + 1 }}
         </div>
       </div>
       <div class="tweet bg-white sm:shadow-around sm:rounded-xl flex flex-col justify-center min-w-screen px-6 sm:px-10 py-4 sm:py-10 gap-6 text-center z-10">
@@ -52,7 +52,7 @@ export default defineComponent({
       board: null as any,
       tweet: 'The evolution of API for running cutting edge AI:\n- run it on your own machine \n- run it in the cloud\n- apply pay for and query an api endpoint\n- pretty please ask one of the authors to run it for you on Twitter \n🥲',
       author: '@karpathy',
-      date: 'Apr 8', 
+      date: 0, 
       topCard: null as any,
       isPanning: false,
       startPosX: 0,
@@ -118,21 +118,25 @@ export default defineComponent({
         this.topCard.style.transition = 'all 200ms ease-out'
         
         // check threshold
-        if (propX > 0.25 && e.direction == Hammer.DIRECTION_RIGHT) {
+        if (propX > 0.5 && e.direction === Hammer.DIRECTION_RIGHT) {
           // get right border position
           posX = this.board.clientWidth
           // throw card towards the right border
           this.topCard.style.transform =
             'translateX(' + posX + 'px) rotate(' + deg + 'deg)'
           this.topCard.style.opacity = 0
+
+          this.date += 1
           
-        } else if (propX < -0.25 && e.direction == Hammer.DIRECTION_LEFT) {
+        } else if (propX < -0.5 && e.direction === Hammer.DIRECTION_LEFT) {
           // get left border position
           posX = - this.board.clientWidth
           // throw card towards the left border
           this.topCard.style.transform =
             'translateX(' + posX + 'px) rotate(' + deg + 'deg)'
           this.topCard.style.opacity = 0
+
+          this.date += 1
           
         } else {
           
