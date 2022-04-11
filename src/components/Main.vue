@@ -1,24 +1,28 @@
 <template>
   <div class="flex justify-center items-center min-h-screen w-screen overflow-x-hidden">
-    <div class="board relative w-max max-w-lg flex flex-col items-center justify-center gap-2 pb-16">
-      <div class="absolute top-0 bg-white sm:rounded-xl flex flex-col justify-center min-w-screen px-6 sm:px-10 py-4 sm:py-10 gap-6 text-center">
-        <div class="text-prose font-serif text-2xl sm:text-3xl max-w-prose whitespace-pre-wrap text-gray-800">
-          {{ tweet }}
-        </div>
-        <div class="font-serif text-2xl text-gray-700">
-          {{ author }}, {{ date }}
-        </div>
-      </div>
-      <div class="tweet bg-white sm:shadow-around sm:rounded-xl flex flex-col justify-center min-w-screen px-6 sm:px-10 py-4 sm:py-10 gap-6 text-center z-10">
-        <div class="text-prose font-serif text-2xl sm:text-3xl max-w-prose whitespace-pre-wrap text-gray-800">
-          {{ tweet }}
-        </div>
-        <div class="font-serif text-2xl text-gray-700">
-          {{ author }}, {{ date }}
+    <div class="board relative w-max max-w-lg flex flex-col items-center justify-center gap-2">
+      <div class="absolute top-0 h-screen sm:h-[32rem] sm:rounded-xl sm:border flex items-center bg-white">
+        <div class="bg-white flex flex-col justify-center min-w-screen px-6 sm:px-10 py-4 sm:py-10 gap-6 text-center">
+          <div class="text-prose font-serif text-2xl sm:text-3xl max-w-prose whitespace-pre-wrap text-gray-800">
+            {{ tweets[1].text }}
+          </div>
+          <div class="font-serif text-xl text-gray-700">
+            {{ tweets[1].author }}, {{ tweets[1].date }}
+          </div>
         </div>
       </div>
-      <CheckCircleIcon class="absolute text-gray-500 h-36 pointer-events-none z-20" :style="{ opacity: yesOpacity }" />
-      <XCircleIcon class="absolute text-gray-500 h-36 pointer-events-none z-20" :style="{ opacity: noOpacity }" />
+      <div class="tweet h-screen sm:h-[32rem] overflow-auto z-10 shadow-around sm:rounded-xl cursor-pointer flex items-center bg-white">
+        <div class="bg-white flex flex-col justify-center min-w-screen px-6 sm:px-10 py-4 sm:py-10 gap-6 text-center z-10">
+          <div class="font-serif text-2xl sm:text-3xl max-w-prose whitespace-pre-wrap text-gray-800">
+            {{ tweets[0].text }}
+          </div>
+          <div class="font-serif text-xl text-gray-700">
+            {{ tweets[0].author }}, {{ tweets[0].date }}
+          </div>
+        </div>
+      </div>
+      <CheckCircleIcon class="absolute text-gray-500 h-36 pointer-events-none z-20" :style="{ opacity: yesOpacity, transition: hintTransition }" />
+      <XCircleIcon class="absolute text-gray-500 h-36 pointer-events-none z-20" :style="{ opacity: noOpacity, transition: hintTransition }" />
       <div class="fixed bottom-0 sm:static bg-white flex justify-evenly py-4 w-full shadow-around sm:rounded-xl z-20 sm:z-0">
         <HeartIcon class="text-gray-500 h-6 w-6 cursor-pointer" />
         <RefreshIcon class="text-gray-500 h-6 w-6 cursor-pointer" />
@@ -56,14 +60,22 @@ export default defineComponent({
   data () {
     return {
       board: null as any,
-      tweet: 'The evolution of API for running cutting edge AI:\n- run it on your own machine \n- run it in the cloud\n- apply pay for and query an api endpoint\n- pretty please ask one of the authors to run it for you on Twitter \n🥲',
-      author: '@karpathy',
-      date: 'Apr 8', 
+      tweets: [{
+          text: 'The evolution of API for running cutting edge AI:\n- run it on your own machine \n- run it in the cloud\n- apply pay for and query an api endpoint\n- pretty please ask one of the authors to run it for you on Twitter \n🥲',
+          author: 'Andrej Karpathy',
+          date: 'Apr 8',
+        }, {
+          text: 'Paradox of ‘repairability’ - the choices that make it more reliable also make it harder to repair.',
+          author: 'Benedict Evans',
+          date: 'Apr 11',
+        },
+      ],
       topCard: null as any,
       isPanning: false,
       startPosX: 0,
       yesOpacity: 0,
       noOpacity: 0,
+      hintTransition: 'none',
     }
   },
   methods: {
@@ -71,6 +83,11 @@ export default defineComponent({
       this.topCard.style.transition = null
       this.topCard.style.transform = null
       this.topCard.style.opacity = 1
+    },
+    async updateTweet () {
+      const tweet = this.tweets[0]
+      this.tweets[0] = this.tweets[1]
+      setTimeout(() => this.tweets[1] = tweet, 200)
     },
     panHandler (e:any) {
       if (e.additionalEvent === 'panup') console.log('bad')
@@ -86,7 +103,6 @@ export default defineComponent({
         let style = window.getComputedStyle(this.topCard)
         let mx = style.transform.match(/^matrix\((.+)\)$/)
         this.startPosX = mx ? parseFloat(mx[1].split(', ')[4]) : 0
-        
       }
       
       // get new coordinates
@@ -113,39 +129,44 @@ export default defineComponent({
       
       if (e.isFinal) {
 
+        this.hintTransition = 'all 500ms ease-out'
         this.yesOpacity = 0
         this.noOpacity = 0
         
         this.isPanning = false
         
         // set back transition property
-        this.topCard.style.transition = 'all 200ms ease-out'
+        this.topCard.style.transition = 'all 500ms ease-out'
         
         // check threshold
         if (propX > 0.25 && e.direction === Hammer.DIRECTION_RIGHT) {
-          // get right border position
-          posX = this.board.clientWidth
-          // throw card towards the right border
-          this.topCard.style.transform =
-            'translateX(' + posX + 'px) rotate(' + deg + 'deg)'
-          this.topCard.style.opacity = 0
-          
+          this.updateTweet()
+            .then(() => {
+              // get right border position
+              posX = this.board.clientWidth
+              // throw card towards the right border
+              this.topCard.style.transform =
+                'translateX(' + posX + 'px) rotate(' + deg + 'deg)'
+              this.topCard.style.opacity = 0
+            })
         } else if (propX < -0.25 && e.direction === Hammer.DIRECTION_LEFT) {
-          // get left border position
-          posX = - this.board.clientWidth
-          // throw card towards the left border
-          this.topCard.style.transform =
-            'translateX(' + posX + 'px) rotate(' + deg + 'deg)'
-          this.topCard.style.opacity = 0
-          
+          this.updateTweet()
+            .then(() => {
+              // get left border position
+              posX = - this.board.clientWidth
+              // throw card towards the left border
+              this.topCard.style.transform =
+                'translateX(' + posX + 'px) rotate(' + deg + 'deg)'
+              this.topCard.style.opacity = 0
+            })
         } else {
-          
           // reset card position
           this.topCard.style.transform = 'none'
-          
         }
         setTimeout(this.reset, 200)
         
+      } else {
+        this.hintTransition = 'none'
       }
     }
   },
