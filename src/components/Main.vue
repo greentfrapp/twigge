@@ -70,7 +70,7 @@ import Hammer from 'hammerjs'
 
 export default defineComponent({
   mounted () {
-    this.searchTweets()
+    // this.searchTweets()
     this.board = document.querySelector('.board')
     const tweet = document.querySelector('.tweet-container') as HTMLElement
     this.topCard = tweet
@@ -122,7 +122,7 @@ export default defineComponent({
       setTimeout(() => {
         this.tweets.shift()
         if (this.tweets.length < 4) {
-          this.searchTweets()
+          // this.searchTweets()
         }
       }, 200)
     },
@@ -153,13 +153,13 @@ export default defineComponent({
     panHandler (e:any) {
       if (e.additionalEvent === 'panup') {
         this.topCard.scrollBy({
-          top: 100,
+          top: -e.deltaY,
           behavior: 'smooth',
         })
       }
       if (e.additionalEvent === 'pandown') {
         this.topCard.scrollBy({
-          top: -100,
+          top: -e.deltaY,
           behavior: 'smooth',
         })
       }
