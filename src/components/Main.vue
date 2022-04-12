@@ -13,7 +13,7 @@
         </div>
       </div>
       <div class="tweet-container h-screen sm:h-[32rem] overflow-auto z-10 shadow-around sm:rounded-xl cursor-pointer flex flex-col divide-y items-center bg-white w-[32rem]">
-        <div v-for="(tweet, i) in tweets[0]" :key="i"
+        <div v-for="(tweet, i) in tweets[0]" :key="i" :id="`${i}`"
           class="relative tweet bg-white min-h-screen sm:min-h-full w-screen sm:w-full flex flex-col justify-center px-6 sm:px-10 py-4 sm:py-10 gap-6 text-center z-10">
           <div class="font-serif text-2xl sm:text-3xl max-w-prose whitespace-pre-wrap text-gray-800">
             {{ tweet.text }}
@@ -92,6 +92,10 @@ export default defineComponent({
           text: 'The evolution of API for running cutting edge AI:\n- run it on your own machine \n- run it in the cloud\n- apply pay for and query an api endpoint\n- pretty please ask one of the authors to run it for you on Twitter \n🥲',
           author: 'Andrej Karpathy',
           date: 'Apr 8',
+        }, {
+          text: 'The evolution of API for running cutting edge AI:\n- run it on your own machine \n- run it in the cloud\n- apply pay for and query an api endpoint\n- pretty please ask one of the authors to run it for you on Twitter \n🥲',
+          author: 'Andrej Karpathy',
+          date: 'Apr 8',
         }], [{
           text: 'Paradox of ‘repairability’ - the choices that make it more reliable also make it harder to repair.',
           author: 'Benedict Evans',
@@ -147,8 +151,18 @@ export default defineComponent({
       })
     },
     panHandler (e:any) {
-      if (e.additionalEvent === 'panup') console.log('bad')
-      if (e.additionalEvent === 'pandown') console.log('bad')
+      if (e.additionalEvent === 'panup') {
+        this.topCard.scrollBy({
+          top: 100,
+          behavior: 'smooth',
+        })
+      }
+      if (e.additionalEvent === 'pandown') {
+        this.topCard.scrollBy({
+          top: -100,
+          behavior: 'smooth',
+        })
+      }
       if (!this.isPanning) {
     
         this.isPanning = true
