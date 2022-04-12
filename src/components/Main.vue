@@ -57,9 +57,9 @@
   scrollbar-width: none;  /* Firefox */
 }
 
-.tweet {
+/* .tweet {
   scroll-snap-align: start;
-}
+} */
 </style>
 
 <script lang="ts">
