@@ -122,6 +122,7 @@ export default defineComponent({
       hintTransition: 'none',
       lambdaUrl: 'https://y6c1a626wf.execute-api.us-east-1.amazonaws.com/default/twigge-dev',
       nextToken: null as any,
+      replyId: 0,
     }
   },
   methods: {
@@ -163,16 +164,12 @@ export default defineComponent({
       })
     },
     scrollUp () {
-      this.topCard.scrollBy({
-        top: -window.innerHeight*0.6,
-        behavior: 'smooth',
-      })
+      this.replyId = Math.max(0, this.replyId - 1)
+      document.getElementById(`${this.replyId}`)?.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"})
     },
     scrollDown () {
-      this.topCard.scrollBy({
-        top: window.innerHeight*0.6,
-        behavior: 'smooth',
-      })
+      this.replyId = Math.min(this.tweets[0].length, this.replyId + 1)
+      document.getElementById(`${this.replyId}`)?.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"})
     },
     panHandler (e:any) {
       // if (e.deltaY < -10) {
