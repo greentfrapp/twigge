@@ -14,15 +14,20 @@
       </div>
       <div class="tweet-container h-screen sm:h-[32rem] overflow-auto z-10 shadow-around sm:rounded-xl cursor-pointer flex flex-col divide-y items-center bg-white w-[32rem]">
         <div v-for="(tweet, i) in tweets[0]" :key="i" :id="`${i}`"
-          class="relative tweet bg-white min-h-screen sm:min-h-full w-screen sm:w-full flex flex-col justify-center px-6 sm:px-10 py-4 sm:py-10 gap-6 text-center z-10">
-          <div class="font-serif text-2xl sm:text-3xl max-w-prose whitespace-pre-wrap text-gray-800">
+          class="relative tweet bg-white min-h-screen sm:min-h-full w-screen sm:w-full flex flex-col justify-center py-4 sm:py-10 gap-6 text-center z-10">
+          <div class="font-serif text-2xl sm:text-3xl max-w-prose whitespace-pre-wrap text-gray-800 px-6 sm:px-10">
             {{ tweet.text }}
           </div>
-          <div class="font-serif text-xl text-gray-700">
+          <div class="font-serif text-xl text-gray-700 px-6 sm:px-10">
             {{ tweet.author }}, {{ tweet.date }}
           </div>
-          <div v-if="i < (tweets[0].length - 1)" class="absolute bottom-20 sm:bottom-4 right-4">
-            <ChevronDownIcon class="h-6 w-6 text-gray-300 z-50" />
+          <div class="absolute bottom-20 sm:bottom-4 w-full flex justify-center">
+            <div class="w-1/2 flex justify-end px-10" @click="scrollUp">
+              <ChevronUpIcon v-if="i > 0" class="h-6 text-gray-300 z-50" />
+            </div>
+            <div class="w-1/2 flex px-10" @click="scrollDown">
+              <ChevronDownIcon v-if="i < (tweets[0].length - 1)" class="h-6 text-gray-300 z-50" />
+            </div>
           </div>
         </div>
       </div>
@@ -64,7 +69,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { HeartIcon, RefreshIcon, ChevronDownIcon } from '@heroicons/vue/outline'
+import { HeartIcon, RefreshIcon, ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/outline'
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/vue/solid'
 import Hammer from 'hammerjs'
 
@@ -82,6 +87,7 @@ export default defineComponent({
     RefreshIcon,
     CheckCircleIcon,
     XCircleIcon,
+    ChevronUpIcon,
     ChevronDownIcon,
   },
   data () {
@@ -154,18 +160,30 @@ export default defineComponent({
           })
       })
     },
+    scrollUp () {
+      this.topCard.scrollBy({
+        top: -10,
+        behavior: 'smooth',
+      })
+    },
+    scrollDown () {
+      this.topCard.scrollBy({
+        top: 10,
+        behavior: 'smooth',
+      })
+    },
     panHandler (e:any) {
-      if (e.deltaY < -10) {
-        this.topCard.scrollBy({
-          top: 10,
-          behavior: 'smooth',
-        })
-      } else if (e.deltaY > 10) {
-        this.topCard.scrollBy({
-          top: -10,
-          behavior: 'smooth',
-        })
-      }
+      // if (e.deltaY < -10) {
+      //   this.topCard.scrollBy({
+      //     top: 10,
+      //     behavior: 'smooth',
+      //   })
+      // } else if (e.deltaY > 10) {
+      //   this.topCard.scrollBy({
+      //     top: -10,
+      //     behavior: 'smooth',
+      //   })
+      // }
       if (!this.isPanning) {
     
         this.isPanning = true
