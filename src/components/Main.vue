@@ -155,12 +155,12 @@ export default defineComponent({
       })
     },
     panHandler (e:any) {
-      if (e.direction === Hammer.DIRECTION_UP) {
+      if (e.deltaY < -10) {
         this.topCard.scrollBy({
           top: 10,
           behavior: 'smooth',
         })
-      } else if (e.direction === Hammer.DIRECTION_DOWN) {
+      } else if (e.deltaY > 10) {
         this.topCard.scrollBy({
           top: -10,
           behavior: 'smooth',
