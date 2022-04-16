@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col justify-center items-center min-h-screen w-max mx-auto overflow-x-hidden gap-4 sm:px-4">
+  <div class="flex flex-col justify-center items-center min-h-screen w-screen sm:w-max mx-auto overflow-x-hidden gap-4 sm:px-4">
     <div v-if="numSwipes < 3" class="bg-white flex justify-evenly py-4 w-full shadow-around sm:rounded-xl z-20 sm:z-0 px-4 text-gray-700 text-center flex flex-col gap-1">
       <h1 class="font-bold">Twigge</h1>
       <h2 class="italic">A tweet at a time</h2>
