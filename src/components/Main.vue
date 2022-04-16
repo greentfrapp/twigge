@@ -72,9 +72,11 @@ import { defineComponent } from 'vue'
 import { HeartIcon, RefreshIcon, ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/outline'
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/vue/solid'
 import Hammer from 'hammerjs'
+import smoothscroll from 'smoothscroll-polyfill';
 
 export default defineComponent({
   mounted () {
+    smoothscroll.polyfill()
     // this.searchTweets()
     this.board = document.querySelector('.board')
     const tweet = document.querySelector('.tweet-container') as HTMLElement
@@ -162,13 +164,13 @@ export default defineComponent({
     },
     scrollUp () {
       this.topCard.scrollBy({
-        top: -10,
+        top: -1,
         behavior: 'smooth',
       })
     },
     scrollDown () {
       this.topCard.scrollBy({
-        top: 10,
+        top: 1,
         behavior: 'smooth',
       })
     },
