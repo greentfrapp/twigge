@@ -41,9 +41,9 @@
   touch-action: none;
 }
 
-.tweet-container {
+/* .tweet-container {
   scroll-snap-type: y mandatory;
-}
+} */
 
 .tweet-container::-webkit-scrollbar,
 .next-container::-webkit-scrollbar {
