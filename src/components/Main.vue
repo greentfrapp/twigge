@@ -123,6 +123,7 @@ export default defineComponent({
       lambdaUrl: 'https://y6c1a626wf.execute-api.us-east-1.amazonaws.com/default/twigge-dev',
       nextToken: null as any,
       replyId: 0,
+      scrolling: false,
     }
   },
   methods: {
@@ -164,25 +165,37 @@ export default defineComponent({
       })
     },
     scrollUp () {
-      this.replyId = Math.max(0, this.replyId - 1)
-      document.getElementById(`${this.replyId}`)?.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"})
+      if (!this.scrolling) {
+        this.scrolling = true
+        this.replyId = Math.min(this.tweets[0].length, this.replyId + 1)
+        document.getElementById(`${this.replyId}`)?.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"})
+        setTimeout(() => this.scrolling = false, 500)
+      }
     },
     scrollDown () {
-      this.replyId = Math.min(this.tweets[0].length, this.replyId + 1)
-      document.getElementById(`${this.replyId}`)?.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"})
+      if (!this.scrolling) {
+        this.scrolling = true
+        this.replyId = Math.max(0, this.replyId - 1)
+        document.getElementById(`${this.replyId}`)?.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"})
+        setTimeout(() => this.scrolling = false, 500)
+      }
     },
     panHandler (e:any) {
-      // if (e.deltaY < -10) {
-      //   this.topCard.scrollBy({
-      //     top: 10,
-      //     behavior: 'smooth',
-      //   })
-      // } else if (e.deltaY > 10) {
-      //   this.topCard.scrollBy({
-      //     top: -10,
-      //     behavior: 'smooth',
-      //   })
-      // }
+      if (e.deltaY < -10) {
+        if (!this.scrolling) {
+          this.scrolling = true
+          this.replyId = Math.min(this.tweets[0].length, this.replyId + 1)
+          document.getElementById(`${this.replyId}`)?.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"})
+          setTimeout(() => this.scrolling = false, 500)
+        }
+      } else if (e.deltaY > 10) {
+        if (!this.scrolling) {
+          this.scrolling = true
+          this.replyId = Math.max(0, this.replyId - 1)
+          document.getElementById(`${this.replyId}`)?.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"})
+          setTimeout(() => this.scrolling = false, 500)
+        }
+      }
       if (!this.isPanning) {
     
         this.isPanning = true
