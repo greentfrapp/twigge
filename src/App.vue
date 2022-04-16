@@ -5,6 +5,8 @@ import Main from './components/Main.vue'
 <style>
 html {
   scroll-behavior: smooth;
+  width: 100vw;
+  overflow-x: hidden;
 }
 </style>
 
