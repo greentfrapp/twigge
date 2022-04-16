@@ -181,14 +181,14 @@ export default defineComponent({
       }
     },
     panHandler (e:any) {
-      if (e.deltaY < -10) {
+      if (e.deltaY < 0) {
         if (!this.scrolling && !this.isPanning) {
           this.scrolling = true
           this.replyId = Math.min(this.tweets[0].length, this.replyId + 1)
           document.getElementById(`${this.replyId}`)?.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"})
           setTimeout(() => this.scrolling = false, 500)
         }
-      } else if (e.deltaY > 10) {
+      } else if (e.deltaY > 0) {
         if (!this.scrolling && !this.isPanning) {
           this.scrolling = true
           this.replyId = Math.max(0, this.replyId - 1)
