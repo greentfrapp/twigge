@@ -151,18 +151,10 @@ export default defineComponent({
       })
     },
     panHandler (e:any) {
-      if (e.additionalEvent === 'panup') {
-        this.topCard.scrollBy({
-          top: -e.deltaY,
-          behavior: 'smooth',
-        })
-      }
-      if (e.additionalEvent === 'pandown') {
-        this.topCard.scrollBy({
-          top: -e.deltaY,
-          behavior: 'smooth',
-        })
-      }
+      this.topCard.scrollBy({
+        top: -e.deltaY,
+        behavior: 'smooth',
+      })
       if (!this.isPanning) {
     
         this.isPanning = true
