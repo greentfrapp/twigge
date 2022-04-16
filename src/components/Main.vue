@@ -164,13 +164,13 @@ export default defineComponent({
     },
     scrollUp () {
       this.topCard.scrollBy({
-        top: -1,
+        top: -10,
         behavior: 'smooth',
       })
     },
     scrollDown () {
       this.topCard.scrollBy({
-        top: 1,
+        top: 10,
         behavior: 'smooth',
       })
     },
