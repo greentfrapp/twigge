@@ -3,7 +3,7 @@ import Main from './components/Main.vue'
 </script>
 
 <style>
-html {
+html * {
   scroll-behavior: smooth;
   width: 100vw;
   overflow-x: hidden;

@@ -301,7 +301,8 @@ export default defineComponent({
       }
       
       if (e.isFinal) {
-        
+        this.yesOpacity = 0
+        this.noOpacity = 0
         // check threshold
         if (propX > 0.25 && e.direction === Hammer.DIRECTION_RIGHT) {
           this.getRelatedTweets()
