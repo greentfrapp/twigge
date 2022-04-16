@@ -121,23 +121,23 @@ export default defineComponent({
       tutorial: true,
       board: null as any,
       tweets: [
-        [{
-          text: 'The evolution of API for running cutting edge AI:\n- run it on your own machine \n- run it in the cloud\n- apply pay for and query an api endpoint\n- pretty please ask one of the authors to run it for you on Twitter \n🥲',
-          author: 'Andrej Karpathy',
-          date: 'Apr 8',
-        }, {
-          text: 'Test 1',
-          author: 'Andrej Karpathy',
-          date: 'Apr 8',
-        }, {
-          text: 'Test 2',
-          author: 'Andrej Karpathy',
-          date: 'Apr 8',
-        }], [{
-          text: 'Paradox of ‘repairability’ - the choices that make it more reliable also make it harder to repair.',
-          author: 'Benedict Evans',
-          date: 'Apr 11',
-        }], 
+        // [{
+        //   text: 'The evolution of API for running cutting edge AI:\n- run it on your own machine \n- run it in the cloud\n- apply pay for and query an api endpoint\n- pretty please ask one of the authors to run it for you on Twitter \n🥲',
+        //   author: 'Andrej Karpathy',
+        //   date: 'Apr 8',
+        // }, {
+        //   text: 'Test 1',
+        //   author: 'Andrej Karpathy',
+        //   date: 'Apr 8',
+        // }, {
+        //   text: 'Test 2',
+        //   author: 'Andrej Karpathy',
+        //   date: 'Apr 8',
+        // }], [{
+        //   text: 'Paradox of ‘repairability’ - the choices that make it more reliable also make it harder to repair.',
+        //   author: 'Benedict Evans',
+        //   date: 'Apr 11',
+        // }], 
       ] as any[],
       topCard: null as any,
       isPanning: false,
@@ -229,6 +229,8 @@ export default defineComponent({
     swipe (dir:string) {
       if (['up', 'down'].includes(dir)) {
         if (!this.scrolling) {
+          this.yesOpacity = 0
+          this.noOpacity = 0
           this.scrolling = true
           if (dir === 'down') this.replyId = Math.max(0, this.replyId - 1)
           else this.replyId = Math.min(this.tweets[0].length - 1, this.replyId + 1)
