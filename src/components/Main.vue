@@ -46,9 +46,9 @@
   touch-action: none;
 }
 
-/* .tweet-container {
+.tweet-container {
   scroll-snap-type: y mandatory;
-} */
+}
 
 .tweet-container::-webkit-scrollbar,
 .next-container::-webkit-scrollbar {
@@ -62,9 +62,9 @@
   scrollbar-width: none;  /* Firefox */
 }
 
-/* .tweet {
+.tweet {
   scroll-snap-align: start;
-} */
+}
 </style>
 
 <script lang="ts">
@@ -164,13 +164,13 @@ export default defineComponent({
     },
     scrollUp () {
       this.topCard.scrollBy({
-        top: -100,
+        top: -window.innerHeight*0.6,
         behavior: 'smooth',
       })
     },
     scrollDown () {
       this.topCard.scrollBy({
-        top: 100,
+        top: window.innerHeight*0.6,
         behavior: 'smooth',
       })
     },
