@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col min-h-screen w-screen max-w-screen sm:w-max overflow-x-hidden gap-4 sm:px-4">
+  <div class="flex flex-col min-h-screen w-screen max-w-screen overflow-x-hidden gap-4 sm:px-4 items-center justify-center">
     <div class="absolute h-screen bg-white flex justify-evenly py-4 w-full shadow-around sm:rounded-xl z-20 sm:z-0 px-4 text-gray-700 text-center flex flex-col gap-1 transition-all"
       style="transition-duration: 2000ms; z-index: 100;" :class="showTutorial ? 'opacity-100' : 'opacity-0 pointer-events-none'">
       <div class="flex flex-col gap-1">
@@ -13,7 +13,7 @@
       </div>
       <button class="px-4 py-2 bg-gray-100 w-max mx-auto" @click="showTutorial=false">Okay</button>
     </div>
-    <div class="board relative w-max max-w-screen overflow-x-hidden flex flex-col items-center justify-center gap-2">
+    <div class="board relative w-max max-w-screen flex flex-col items-center justify-center gap-2">
       <div v-if="tweets.length > 1" class="next-container absolute top-0 h-screen sm:h-[32rem] overflow-auto sm:rounded-xl sm:border flex flex-col items-center bg-white w-[32rem]">
         <div v-for="(tweet, i) in tweets[1]" :key="i"
           class="bg-white min-h-screen sm:min-h-full w-screen sm:w-full flex flex-col justify-center px-6 sm:px-10 py-4 sm:py-10 gap-6 text-center z-10">
@@ -30,14 +30,14 @@
           Loading...
         </div>
         <div v-else v-for="(tweet, i) in tweets[0]" :key="i" :id="`${i}`"
-          class="relative tweet bg-white min-h-screen sm:min-h-full w-screen sm:w-full flex flex-col justify-center py-4 sm:py-16 gap-6 text-center z-10">
+          class="relative tweet bg-white min-h-screen sm:min-h-full w-screen sm:w-full flex flex-col py-4 sm:py-16 gap-6 text-center z-10 justify-center">
           <div class="font-serif text-2xl max-w-prose whitespace-pre-wrap text-gray-800 px-6 sm:px-10">
             {{ tweet.text }}
           </div>
           <div class="font-serif text-xl text-gray-700 px-6 sm:px-10">
             {{ tweet.author }}, {{ tweet.date }}
           </div>
-          <div class="absolute bottom-20 sm:bottom-4 w-full flex justify-center items-center">
+          <div class="absolute bottom-4 sm:bottom-4 w-full flex justify-center items-center">
             <div v-if="i > 0" class="w-1/2 flex justify-center px-10" @click="swipe('down')">
               <ChevronUpIcon class="h-6 text-gray-300 z-50" />
             </div>
