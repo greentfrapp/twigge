@@ -1,13 +1,17 @@
 <template>
   <div class="flex flex-col justify-center items-center min-h-screen w-screen sm:w-max mx-auto overflow-x-hidden gap-4 sm:px-4">
-    <div v-if="numSwipes < 3" class="bg-white flex justify-evenly py-4 w-full shadow-around sm:rounded-xl z-20 sm:z-0 px-4 text-gray-700 text-center flex flex-col gap-1">
-      <h1 class="font-bold">Twigge</h1>
-      <h2 class="italic">A tweet at a time</h2>
-      <div class="font-light">
-        Swipe right on tweets you like, otherwise swipe left.<br/>
-        Swipe up and down to view threads.<br/>
-        Arrow keys work as well.
+    <div class="absolute h-screen bg-white flex justify-evenly py-4 w-full shadow-around sm:rounded-xl z-20 sm:z-0 px-4 text-gray-700 text-center flex flex-col gap-1 transition-all"
+      style="transition-duration: 2000ms;" :class="tutorial ? 'opacity-100' : 'opacity-0 pointer-events-none'">
+      <div class="flex flex-col gap-1">
+        <h1 class="font-bold text-xl">Twigge</h1>
+        <h2 class="italic">A tweet at a time</h2>
       </div>
+      <div class="font-light">
+        Swipe right on tweets you like,<br/>otherwise swipe left.<br/>
+        Swipe up and down to view threads.<br/><br/>
+        Arrow keys work on desktop.
+      </div>
+      <button class="px-4 py-2 bg-gray-100 w-max mx-auto" @click="tutorial=false">Okay</button>
     </div>
     <div class="board relative w-max max-w-lg flex flex-col items-center justify-center gap-2">
       <div v-if="tweets.length > 1" class="next-container absolute top-0 h-screen sm:h-[32rem] overflow-auto sm:rounded-xl sm:border flex flex-col items-center bg-white w-[32rem]">
@@ -114,25 +118,26 @@ export default defineComponent({
   },
   data () {
     return {
+      tutorial: true,
       board: null as any,
       tweets: [
-        // [{
-        //   text: 'The evolution of API for running cutting edge AI:\n- run it on your own machine \n- run it in the cloud\n- apply pay for and query an api endpoint\n- pretty please ask one of the authors to run it for you on Twitter \n🥲',
-        //   author: 'Andrej Karpathy',
-        //   date: 'Apr 8',
-        // }, {
-        //   text: 'Test 1',
-        //   author: 'Andrej Karpathy',
-        //   date: 'Apr 8',
-        // }, {
-        //   text: 'Test 2',
-        //   author: 'Andrej Karpathy',
-        //   date: 'Apr 8',
-        // }], [{
-        //   text: 'Paradox of ‘repairability’ - the choices that make it more reliable also make it harder to repair.',
-        //   author: 'Benedict Evans',
-        //   date: 'Apr 11',
-        // }], 
+        [{
+          text: 'The evolution of API for running cutting edge AI:\n- run it on your own machine \n- run it in the cloud\n- apply pay for and query an api endpoint\n- pretty please ask one of the authors to run it for you on Twitter \n🥲',
+          author: 'Andrej Karpathy',
+          date: 'Apr 8',
+        }, {
+          text: 'Test 1',
+          author: 'Andrej Karpathy',
+          date: 'Apr 8',
+        }, {
+          text: 'Test 2',
+          author: 'Andrej Karpathy',
+          date: 'Apr 8',
+        }], [{
+          text: 'Paradox of ‘repairability’ - the choices that make it more reliable also make it harder to repair.',
+          author: 'Benedict Evans',
+          date: 'Apr 11',
+        }], 
       ] as any[],
       topCard: null as any,
       isPanning: false,
