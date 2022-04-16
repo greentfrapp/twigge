@@ -41,9 +41,9 @@
   touch-action: none;
 }
 
-/* .tweet-container {
+.tweet-container {
   scroll-snap-type: y mandatory;
-} */
+}
 
 .tweet-container::-webkit-scrollbar,
 .next-container::-webkit-scrollbar {
@@ -57,9 +57,9 @@
   scrollbar-width: none;  /* Firefox */
 }
 
-/* .tweet {
+.tweet {
   scroll-snap-align: start;
-} */
+}
 </style>
 
 <script lang="ts">
@@ -93,7 +93,11 @@ export default defineComponent({
           author: 'Andrej Karpathy',
           date: 'Apr 8',
         }, {
-          text: 'The evolution of API for running cutting edge AI:\n- run it on your own machine \n- run it in the cloud\n- apply pay for and query an api endpoint\n- pretty please ask one of the authors to run it for you on Twitter \n🥲',
+          text: 'Test 1',
+          author: 'Andrej Karpathy',
+          date: 'Apr 8',
+        }, {
+          text: 'Test 2',
           author: 'Andrej Karpathy',
           date: 'Apr 8',
         }], [{
