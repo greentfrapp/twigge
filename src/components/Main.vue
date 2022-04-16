@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col justify-center items-center min-h-screen w-screen sm:w-max mx-auto overflow-x-hidden gap-4 sm:px-4">
+  <div class="flex flex-col min-h-screen w-screen max-w-screen sm:w-max overflow-x-hidden gap-4 sm:px-4">
     <div class="absolute h-screen bg-white flex justify-evenly py-4 w-full shadow-around sm:rounded-xl z-20 sm:z-0 px-4 text-gray-700 text-center flex flex-col gap-1 transition-all"
       style="transition-duration: 2000ms; z-index: 100;" :class="showTutorial ? 'opacity-100' : 'opacity-0 pointer-events-none'">
       <div class="flex flex-col gap-1">
@@ -13,7 +13,7 @@
       </div>
       <button class="px-4 py-2 bg-gray-100 w-max mx-auto" @click="showTutorial=false">Okay</button>
     </div>
-    <div class="board relative w-max max-w-lg flex flex-col items-center justify-center gap-2">
+    <div class="board relative w-max max-w-screen overflow-x-hidden flex flex-col items-center justify-center gap-2">
       <div v-if="tweets.length > 1" class="next-container absolute top-0 h-screen sm:h-[32rem] overflow-auto sm:rounded-xl sm:border flex flex-col items-center bg-white w-[32rem]">
         <div v-for="(tweet, i) in tweets[1]" :key="i"
           class="bg-white min-h-screen sm:min-h-full w-screen sm:w-full flex flex-col justify-center px-6 sm:px-10 py-4 sm:py-10 gap-6 text-center z-10">
@@ -25,7 +25,7 @@
           </div>
         </div>
       </div>
-      <div class="tweet-container h-screen sm:h-[32rem] overflow-auto z-10 shadow-around sm:rounded-xl cursor-pointer flex flex-col divide-y items-center bg-white w-[32rem]">
+      <div class="tweet-container h-screen sm:h-[32rem] overflow-y-auto overflow-x-hidden z-10 shadow-around sm:rounded-xl cursor-pointer flex flex-col divide-y items-center bg-white w-[32rem] max-w-screen">
         <div v-if="tweets.length === 0" class="text-gray-700 min-h-screen sm:min-h-full w-screen sm:w-full flex justify-center items-center">
           Loading...
         </div>
@@ -235,7 +235,7 @@ export default defineComponent({
           if (dir === 'down') this.replyId = Math.max(0, this.replyId - 1)
           else this.replyId = Math.min(this.tweets[0].length - 1, this.replyId + 1)
           document.getElementById(`${this.replyId}`)?.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"})
-          setTimeout(() => this.scrolling = false, 300)
+          setTimeout(() => this.scrolling = false, 500)
         }
       } else if (['left', 'right'].includes(dir)) {
         this.numSwipes += 1
@@ -260,63 +260,64 @@ export default defineComponent({
       }
     },
     panHandler (e:any) {
-      if (e.deltaY < -10) {
+      if (e.deltaY < -10 && Math.abs(e.deltaX) < 50) {
         this.swipe('up')
-      } else if (e.deltaY > 10) {
+      } else if (e.deltaY > 10 && Math.abs(e.deltaX) < 50) {
         this.swipe('down')
-      }
-      if (!this.isPanning) {
-    
-        this.isPanning = true
-        
-        // remove transition property
-        this.topCard.style.transition = null
-        
-        // get card coordinates in pixels
-        let style = window.getComputedStyle(this.topCard)
-        let mx = style.transform.match(/^matrix\((.+)\)$/)
-        this.startPosX = mx ? parseFloat(mx[1].split(', ')[4]) : 0
-      }
-      
-      // get new coordinates
-      let posX = e.deltaX + this.startPosX
-      
-      // get ratio between swiped pixels and the axes
-      let propX = e.deltaX / this.board.clientWidth
-      
-      // get swipe direction, left (-1) or right (1)
-      let dirX = e.deltaX < 0 ? -1 : 1
-      
-      // get degrees of rotation (between 0 and +/- 45)
-      let deg = dirX * Math.abs(propX) * 45
-      
-      // move and rotate card
-      this.topCard.style.transform =
-        'translateX(' + posX + 'px) rotate(' + deg + 'deg)'
-
-      if (dirX === 1) {
-        this.yesOpacity = propX
       } else {
-        this.noOpacity = -propX
-      }
+        if (!this.isPanning) {
       
-      if (e.isFinal) {
-        this.yesOpacity = 0
-        this.noOpacity = 0
-        // check threshold
-        if (propX > 0.25 && e.direction === Hammer.DIRECTION_RIGHT) {
-          this.getRelatedTweets()
-          this.swipe('right')
-        } else if (propX < -0.25 && e.direction === Hammer.DIRECTION_LEFT) {
-          this.swipe('left')
-        } else {
-          // reset card position
-          this.topCard.style.transform = 'none'
+          this.isPanning = true
+          
+          // remove transition property
+          this.topCard.style.transition = null
+          
+          // get card coordinates in pixels
+          let style = window.getComputedStyle(this.topCard)
+          let mx = style.transform.match(/^matrix\((.+)\)$/)
+          this.startPosX = mx ? parseFloat(mx[1].split(', ')[4]) : 0
         }
-        setTimeout(this.reset, 200)
         
-      } else {
-        this.hintTransition = 'none'
+        // get new coordinates
+        let posX = e.deltaX + this.startPosX
+        
+        // get ratio between swiped pixels and the axes
+        let propX = e.deltaX / this.board.clientWidth
+        
+        // get swipe direction, left (-1) or right (1)
+        let dirX = e.deltaX < 0 ? -1 : 1
+        
+        // get degrees of rotation (between 0 and +/- 45)
+        let deg = dirX * Math.abs(propX) * 45
+        
+        // move and rotate card
+        this.topCard.style.transform =
+          'translateX(' + posX + 'px) rotate(' + deg + 'deg)'
+
+        if (dirX === 1) {
+          this.yesOpacity = propX
+        } else {
+          this.noOpacity = -propX
+        }
+        
+        if (e.isFinal) {
+          this.yesOpacity = 0
+          this.noOpacity = 0
+          // check threshold
+          if (propX > 0.25 && e.direction === Hammer.DIRECTION_RIGHT) {
+            this.getRelatedTweets()
+            this.swipe('right')
+          } else if (propX < -0.25 && e.direction === Hammer.DIRECTION_LEFT) {
+            this.swipe('left')
+          } else {
+            // reset card position
+            this.topCard.style.transform = 'none'
+          }
+          setTimeout(this.reset, 200)
+          
+        } else {
+          this.hintTransition = 'none'
+        }
       }
     }
   },
